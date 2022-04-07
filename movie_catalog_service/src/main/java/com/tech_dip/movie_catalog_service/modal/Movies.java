@@ -1,15 +1,6 @@
-package com.tech_dip.movie_data_service.modal;
+package com.tech_dip.movie_catalog_service.modal;
 
-import org.checkerframework.checker.signature.qual.Identifier;
-
-import javax.persistence.*;
-import java.io.Serializable;
-
-@Entity
-public class Movies implements Serializable{
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+public class Movies{
     private Long id;
     private String movieName;
     private String description;

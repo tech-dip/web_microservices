@@ -1,18 +1,43 @@
 package com.tech_dip.movie_data_service.service;
-import com.tech_dip.movie_data_service.modal.MovieInfo;
 import com.tech_dip.movie_data_service.modal.Movies;
+import com.tech_dip.movie_data_service.repository.MovieRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class MovieInfoService {
 
-    public Movies getMovieDetail(int movieId) {
-        List<Movies> movieList= Arrays.asList(new Movies(1,"Avenger","A HollyWood Movie"),new Movies(2,"Bahubali","A BollyWood Movie"),new Movies(3,"Iron Man","A HollyWood Movie"));
-         Movies movie = movieList.stream().filter((movies) -> movies.getId() == movieId).findAny().get();
-            return movie;
+    @Autowired
+    private MovieRepository movieRepository;
+
+    public Movies addMovies (Movies movies) {
+
+        return movieRepository.save(movies);
+}
+
+    public Movies getMovieById(long id) {
+
+        return movieRepository.findById(id).orElseThrow( () -> new NullPointerException("movie not found  for " + id));
+    }
+
+    public List<Movies> getAllMovie() {
+        List<Movies> movieList =  movieRepository.findAll();
+        return movieList;
+    }
+
+    public Movies updateMovies(Long movieId,Movies movies) {
+        Movies data = movieRepository.findById(movieId)
+                .orElseThrow(() -> new NullPointerException("movie not found for this id :: " + movies));
+        data.setMovieName(movies.getMovieName());
+        final Movies updatedmovie = movieRepository.save(data);
+        return updatedmovie;
+    }
+
+    public  void deleteMovie(Long id) {
+        Movies movies = movieRepository.findById(id).orElseThrow(
+                () -> new NullPointerException("Movie not found" + id));
+        movieRepository.delete(movies);
+        System.out.println("deleted movie :" +id);
     }
 }
